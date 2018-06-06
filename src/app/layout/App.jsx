@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Button } from 'semantic-ui-react';
-import EventDashboard from '../../feature/event/EventDashboard/EventDashboard';
+import EventDashboard from './../feature/event/EventDashboard/EventDashboard';
 
 class App extends Component {
   render() {
