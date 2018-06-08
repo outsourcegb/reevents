@@ -75,7 +75,7 @@ class EventDashboard extends Component {
   }
 
   handleDelete = (eventID) => () => {
-    const updatedEvents = this.state.events.filter(e => e.id != eventID)
+    const updatedEvents = this.state.events.filter(e => e.id !== eventID)
     this.setState({
       events: updatedEvents
     })
