@@ -37,3 +37,8 @@ const testReducer = (state=initialState, action) => {
 }
 
 export default testReducer
+
+// export default createReducer(initialState, {
+//   [INCREMENT_COUNTER]: incrementCounter,
+//   [DECREMENT_COUNTER]: decrementCounter
+// })
