@@ -1,8 +1,20 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import cuid from 'cuid';
 import { Grid, Button } from 'semantic-ui-react';
 import EventList from './../EventList/EventList';
 import EventForm from './../EventForm/EventForm';
+import {createEvent, updateEvent, deleteEvent} from './../eventActions';
+
+const mapState = (state) => ({
+  events: state.events
+})
+
+const actions = {
+  createEvent,
+  deleteEvent,
+  updateEvent
+}
 
 // const eventsDashboard = [
 //   {
@@ -59,7 +71,7 @@ class EventDashboard extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      events: eventsDashboard,
+      //events: eventsDashboard,
       isOpen: false,
       selectedEvent: null
     }
@@ -75,21 +87,24 @@ class EventDashboard extends Component {
   }
 
   handleDelete = (eventID) => () => {
-    const updatedEvents = this.state.events.filter(e => e.id !== eventID)
-    this.setState({
-      events: updatedEvents
-    })
+    // const updatedEvents = this.props.events.filter(e => e.id !== eventID)
+    // this.setState({
+    //   events: updatedEvents
+    // })
+
+    this.props.deleteEvent(eventID)
   }
 
   handleUpdateEvent = (updatedEvent) => {
+    this.props.updateEvent(updatedEvent)
     this.setState({
-      events: this.state.events.map(event => {
-          if(event.id === updatedEvent.id) {
-            return Object.assign({}, updatedEvent)
-          } else {
-            return event
-          }
-        }),
+      // events: this.props.events.map(event => {
+      //     if(event.id === updatedEvent.id) {
+      //       return Object.assign({}, updatedEvent)
+      //     } else {
+      //       return event
+      //     }
+      //   }),
       isOpen: false,
       selectedEvent: null
     })
@@ -115,22 +130,24 @@ class EventDashboard extends Component {
     newEvent.id = cuid()
     newEvent.hostPhotoURL = '/assets/user.png'
     newEvent.attendees = []
-    const updatedEvents = [...this.state.events, newEvent]
+    //const updatedEvents = [...this.state.events, newEvent]
 
+    this.props.createEvent(newEvent)
     this.setState({
-      events: updatedEvents,
+      //events: updatedEvents,
       isOpen: false
     })
   }
 
   render() {
     const {selectedEvent} = this.state
+    const {events} = this.props
     return (
       <Grid>
         <Grid.Column width={10}>
           <EventList 
             deleteEvent={this.handleDelete}
-            onEventOpen={this.handleOpenEvent} events={this.state.events} />
+            onEventOpen={this.handleOpenEvent} events={events} />
         </Grid.Column>
         <Grid.Column width={6}>
           <Button onClick={this.handleFormOpen} positive content="Create Event" />
@@ -146,4 +163,4 @@ class EventDashboard extends Component {
   }
 }
 
-export default EventDashboard
+export default connect(mapState, actions)(EventDashboard)

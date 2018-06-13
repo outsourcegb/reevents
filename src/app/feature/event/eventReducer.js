@@ -1,5 +1,4 @@
 import { CREATE_EVENT, UPDATE_EVENT, DELETE_EVENT} from './eventConstants'
-import { PassThrough } from 'stream';
 
 const initialState = [
   {
@@ -52,24 +51,25 @@ const initialState = [
   }
 ]
 
-
-
 const eventReducer = (state = initialState, action) => {
   switch(action.type) {
     case CREATE_EVENT:
-      return {
+      return [
         ...state,
         action.payload.event
-      }
+      ]
     case UPDATE_EVENT:
-      return {
-        ...state.filter()
-
-      }
-    case DELETE_EVENT:
+      return [
+        ...state.filter(event => event.id !== action.payload.event.id),
+        action.payload.event
+      ]
+    case DELETE_EVENT: 
+      return [
+        ...state.filter(event => event.id !== action.payload.eventId)
+      ]
     default:
       return state
   }
 }
 
-export default eventReducer
+export default eventReducer;
