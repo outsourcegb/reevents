@@ -25,8 +25,8 @@ class App extends Component {
             <Container className="main">
               <Switch>
                 <Route path="/test" component={TestArea} />
-                <Route path="/events" component={EventDashboard} />
                 <Route path="/events/:id" component={EventDetailedPage} />
+                <Route path="/events" component={EventDashboard} />
                 <Route path="/people" component={PeopleDashboard} />
                 <Route path="/profile/:id" component={UserDetailedPage} />
                 <Route path="/settings" component={SettingsDashboard} />
