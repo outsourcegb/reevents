@@ -14,7 +14,7 @@ const actions = {
 
 class TestArea extends Component {
   render() {
-    const {incrementCounter, decrementCounter, data} = this.props
+    const {incrementCounter, decrementCounter} = this.props
     return (
       <div>
         Test page
