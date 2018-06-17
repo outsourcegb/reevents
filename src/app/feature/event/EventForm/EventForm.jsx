@@ -1,7 +1,11 @@
+/* global google */
+
 import React, { Component } from 'react'
 import {connect} from 'react-redux'
 import {Field, reduxForm} from 'redux-form'
 import {composeValidators, combineValidators, isRequired, hasLengthGreaterThan} from 'revalidate'
+import {geocodeByAddress, getLatLng} from 'react-places-autocomplete'
+import Script from 'react-load-script'
 import cuid from 'cuid'
 import moment from 'moment'
 import { Segment, Form, Button, Grid, Header } from 'semantic-ui-react'
@@ -10,6 +14,7 @@ import TextInput from './../../../common/form/TextInput'
 import TextArea from './../../../common/form/TextArea'
 import SelectInput from './../../../common/form/SelectInput'
 import DateInput from './../../../common/form/DateInput'
+import PlacesInput from './../../../common/form/PlacesInput'
 
 const category = [
     {key: 'drinks', text: 'Drinks', value: 'drinks'},
@@ -52,8 +57,48 @@ const actions = {
 }
 
 class EventForm extends Component {
+  state = {
+    cityLatLng: {},
+    venueLatLng: {},
+    scriptLoaded: false
+  }
+
+  handleScriptLoad = () => {
+    this.setState({
+      scriptLoaded: true
+    })
+  }
+
+  handleCitySelect = (selectedCity) => {
+    geocodeByAddress(selectedCity)
+      .then(results => getLatLng(results[0]))
+      .then(latlng => {
+        this.setState({
+          cityLatLng: latlng
+        })
+      })
+      .then(() => {
+        this.props.change('city', selectedCity)
+      })
+  }
+
+  handleVenueSelect = (selectedVenue) => {
+    geocodeByAddress(selectedVenue)
+      .then(results => getLatLng(results[0]))
+      .then(latlng => {
+        this.setState({
+          venueLatLng: latlng
+        })
+      })
+      .then(() => {
+        this.props.change('venue', selectedVenue)
+      })
+  }
+
   onFormSubmit = (values) => {
     values.date = moment(values.date).format()
+    values.venueLatLng = this.state.venueLatLng
+    
     if (this.props.initialValues && this.props.initialValues.id) {
       this.props.updateEvent(values)
       this.props.history.goBack()
@@ -74,6 +119,10 @@ class EventForm extends Component {
     const {invalid, submitting, pristine} = this.props
     return (
       <Grid>
+        <Script
+          url='https://maps.googleapis.com/maps/api/js?key=AIzaSyBSy55VZSkRujpbctAVai97eQpI5_LZOmc&libraries=places'
+          onLoad={this.handleScriptLoad}
+        />
         <Grid.Column width={10}>
           <Segment>
             <Header sub color='teal' content='Event details'></Header>
@@ -103,14 +152,22 @@ class EventForm extends Component {
               <Field
                 name="city"
                 type="text"
-                component={TextInput}
+                component={PlacesInput}
+                options={{types: ['(cities)']}}
+                onSelect={this.handleCitySelect}
                 placeholder="Event city" />
 
-              <Field
-                name="venue"
-                type="text"
-                component={TextInput}
-                placeholder="Event venue" />
+              {this.state.scriptLoaded && 
+                <Field
+                  name="venue"
+                  type="text"
+                  component={PlacesInput}
+                  options={{ 
+                    location: new google.maps.LatLng(this.state.cityLatLng),
+                    radius: 1000,
+                    types: ['establishment'] }}
+                    placeholder="Event venue"
+                onSelect={this.handleVenueSelect} />}
 
               <Field
                 name="date"
