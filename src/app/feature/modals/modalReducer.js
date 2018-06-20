@@ -2,13 +2,10 @@ import {MODAL_CLOSE, MODAL_OPEN} from './modalConstants'
 
 const initialState = null
 
-export const modalReducer = (state = initialState, action) => {
+const modalReducer = (state = initialState, action) => {
   switch(action.type) {
     case MODAL_OPEN:
-      return {
-        action.payload.modalType,
-        action.payload.modalProps
-      }
+      return action.payload
     case MODAL_CLOSE:
       return null
     default:

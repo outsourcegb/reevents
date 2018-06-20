@@ -5,6 +5,7 @@ import { connect } from 'react-redux'
 import PlacesAutocomplete, { geocodeByAddress, getLatLng } from 'react-places-autocomplete'
 import GoogleMapReact from 'google-map-react';
 import { incrementCounter, decrementCounter } from './TestActions.js'
+import {openModal} from './../modals/modalActions'
 
 const mapState = (state) => ({
   data: state.test.data
@@ -12,7 +13,8 @@ const mapState = (state) => ({
 
 const actions = {
   incrementCounter,
-  decrementCounter
+  decrementCounter,
+  openModal
 }
 
 const Marker = ({ text }) => <Icon name="marker" size="big" color="red" />
@@ -54,7 +56,7 @@ class TestArea extends Component {
       value: this.state.address,
       onChange: this.onChange,
     }
-    const {incrementCounter, decrementCounter} = this.props
+    const {incrementCounter, decrementCounter, openModal} = this.props
     return (
       <div>
         {/* <Script 
@@ -69,6 +71,7 @@ class TestArea extends Component {
 
         <Button onClick={incrementCounter} color='green' content="Increment" />
         <Button onClick={decrementCounter} color='red' content="Decrement" />
+        <Button onClick={() => openModal("TestModal", {data: 43})} color='teal' content="Open Modal" />
 
         <br /><br /><br />
 
