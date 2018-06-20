@@ -5,21 +5,20 @@ import {NavLink, Link, withRouter} from 'react-router-dom'
 import SignedOutMenu from './../Menus/SignedOutMenu'
 import SignedInMenu from './../Menus/SignedInMenu'
 import {openModal} from './../../modals/modalActions'
+import {signOutUser} from './../../auth/authActions'
+
+const mapState = (state) => ({
+  auth: state.auth
+})
 
 const actions = {
-  openModal
+  openModal,
+  signOutUser
 }
 
 class NavBar extends Component {
-  state = {
-    authenticated: false
-  }
-
   handleSignIn = () => {
     this.props.openModal('LoginModal')
-    // this.setState({
-    //   authenticated: true
-    // })
   }
 
   handleRegister = () => {
@@ -27,15 +26,14 @@ class NavBar extends Component {
   }
 
   handleSignOut = () => {
-    this.setState({
-      authenticated: false
-    })
-
+    this.props.signOutUser()
     this.props.history.push('/')
   }
 
   render() {
-    const {authenticated} = this.state
+    console.log(this.props)
+    const {auth} = this.props
+    const authenticated = auth.authenticated
     return (
       <Menu inverted fixed="top">
         <Container>
@@ -52,15 +50,13 @@ class NavBar extends Component {
           <Menu.Item>
             <Button as={Link} to='/createEvent' floated="right" positive inverted content="Create Event" />
           </Menu.Item>}
-          { /*<Menu.Item position="right">
-            <Button basic inverted content="Login" />
-            <Button basic inverted content="Sign Out" style={{marginLeft: '0.5em'}} />
-          </Menu.Item> */ }
-          {authenticated ? <SignedInMenu signOut={this.handleSignOut} /> : <SignedOutMenu  signIn={this.handleSignIn} register={this.handleRegister} />}
+          {authenticated ? 
+            <SignedInMenu signOut={this.handleSignOut} currentUser={auth.currentUser} /> : 
+            <SignedOutMenu  signIn={this.handleSignIn} register={this.handleRegister} />}
         </Container>
       </Menu>
     )
   }
 }
 
-export default withRouter(connect(null, actions)(NavBar));
+export default withRouter(connect(mapState, actions)(NavBar));
