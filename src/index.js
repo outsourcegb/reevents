@@ -8,10 +8,11 @@ import App from './app/layout/App';
 import registerServiceWorker from './registerServiceWorker';
 import {configureStore} from './app/store/configureStore';
 import ScrollToTop from './app/common/util/ScrollToTop';
-
+import {loadEvents} from './app/feature/event/eventActions';
 const store = configureStore()
 
 const rootEl = document.getElementById('root');
+store.dispatch(loadEvents());
 
 let render = () => {
   ReactDOM.render( 
