@@ -37,7 +37,7 @@ export const incrementAsync = () => {
     dispatch(startCounterAction())
     await delay(1000)
     dispatch({type: INCREMENT_COUNTER})
-    dispatch({finishCounterAction()})
+    dispatch(finishCounterAction())
   }
 }
 
@@ -48,8 +48,8 @@ export const decrementAsync = () => {
     dispatch({
       type: DECREMENT_COUNTER
     })
-    dispatch({
+    dispatch(
       finishCounterAction()
-    })
+    )
   }
 }
