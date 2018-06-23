@@ -7,10 +7,16 @@ const firebaseConfig = {
   databaseURL: "https://revents-e2afc.firebaseio.com",
   projectId: "revents-e2afc",
   storageBucket: "revents-e2afc.appspot.com",
-  messagingSenderId: "850963878052"
+  messagingSenderId: "850963878052",
 }
 
 firebase.initializeApp(firebaseConfig)
-firebase.firestore()
+//firebase.firestore()
+
+const firestore = firebase.firestore();
+const settings = {
+  timestampsInSnapshots: true
+};
+firestore.settings(settings);
 
 export default firebase
