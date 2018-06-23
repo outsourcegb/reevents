@@ -6,15 +6,13 @@ import {NavLink, Link, withRouter} from 'react-router-dom'
 import SignedOutMenu from './../Menus/SignedOutMenu'
 import SignedInMenu from './../Menus/SignedInMenu'
 import {openModal} from './../../modals/modalActions'
-import {signOutUser} from './../../auth/authActions'
 
 const mapState = (state) => ({
   auth: state.firebase.auth
 })
 
 const actions = {
-  openModal,
-  signOutUser
+  openModal
 }
 
 class NavBar extends Component {
