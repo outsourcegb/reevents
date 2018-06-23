@@ -1,6 +1,6 @@
 import React from 'react';
 import {connect} from 'react-redux'
-import { Form, Segment, Button } from 'semantic-ui-react';
+import { Form, Segment, Button, Label } from 'semantic-ui-react';
 import { Field, reduxForm } from 'redux-form';
 import TextInput from './../../../common/form/TextInput';
 import {loginUser} from './../authActions';
@@ -9,9 +9,10 @@ const actions = {
   loginUser
 }
 
-const LoginForm = ({loginUser, handleSubmit}) => {
+const LoginForm = ({loginUser, handleSubmit, error}) => {
   return (
-    <Form error size="large" onSubmit={handleSubmit(loginUser)}>
+    <Form size="large" onSubmit={handleSubmit(loginUser)}>
+      {error && <Label basic color="red" pointing="below">{error}</Label>}
       <Segment>
         <Field
           name="email"
