@@ -14,6 +14,7 @@ class LoginModal extends Component {
                 size='mini'
                 open={true}
                 onClose={this.props.closeModal}
+                centered={false}
             >
                 <Modal.Header>
                     Login to Re-vents
